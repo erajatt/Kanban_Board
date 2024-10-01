@@ -8,6 +8,11 @@ import { ReactComponent as HighIcon } from "../../assets/icons_FEtask/Img - High
 import { ReactComponent as MediumIcon } from "../../assets/icons_FEtask/Img - Medium Priority.svg";
 import { ReactComponent as LowIcon } from "../../assets/icons_FEtask/Img - Low Priority.svg";
 import { ReactComponent as NoPriorityIcon } from "../../assets/icons_FEtask/No-priority.svg";
+import { ReactComponent as TodoIcon } from "../../assets/icons_FEtask/To-do.svg";
+import { ReactComponent as InProgressIcon } from "../../assets/icons_FEtask/in-progress.svg";
+import { ReactComponent as DoneIcon } from "../../assets/icons_FEtask/Done.svg";
+import { ReactComponent as CancelledIcon } from "../../assets/icons_FEtask/Cancelled.svg";
+import { ReactComponent as BacklogIcon } from "../../assets/icons_FEtask/Backlog.svg";
 
 // Priority Icons Mapping
 const priorityIcons = {
@@ -18,13 +23,25 @@ const priorityIcons = {
   "No priority": NoPriorityIcon,
 };
 
+const statusIcons = {
+  Todo: TodoIcon,
+  "In progress": InProgressIcon,
+  Done: DoneIcon,
+  Cancelled: CancelledIcon,
+  Backlog: BacklogIcon,
+};
+
 function Column({ title, tickets, users, grouping }) {
   const user = grouping === "user" ? users.find((u) => u.id === title) : null;
 
-  // Function to return the priority icon component based on the title
   const getPriorityIcon = (priority) => {
     const PriorityIcon = priorityIcons[priority];
     return <PriorityIcon className="priority-icon-column" />;
+  };
+
+  const getStatusIcon = (status) => {
+    const StatusIcon = statusIcons[status];
+    return <StatusIcon className="status-icon-column" />;
   };
 
   function getInitials(name) {
@@ -62,7 +79,10 @@ function Column({ title, tickets, users, grouping }) {
             <h2 className="column-title">{user.name}</h2>
           </>
         ) : (
-          <h2 className="column-title">{title}</h2>
+          <>
+            {getStatusIcon(title)}
+            <h2 className="column-title">{title}</h2>
+          </>
         )}
         <span className="ticket-count">{tickets.length}</span>
         <div className="column-actions">

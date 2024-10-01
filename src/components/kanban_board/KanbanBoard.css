@@ -1,6 +1,6 @@
 .kanban-board {
   display: flex;
-  padding: 20px;
+  padding: 40px;
   overflow-x: scroll; /* Enable horizontal scroll */
   overflow-y: hidden; /* Hide vertical scroll */
   -ms-overflow-style: none; /* Internet Explorer 10+ */

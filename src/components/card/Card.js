@@ -41,7 +41,7 @@ function Card({ ticket, user, grouping }) {
             className="user-avatar"
             style={{ backgroundColor: getUserColor(user.name) }}
           >
-            {user.name[0].toUpperCase()}
+            {getInitials(user.name)}
             <span
               className={`availability-indicator ${
                 user.available ? "available" : ""
@@ -76,6 +76,16 @@ function getUserColor(name) {
   }
   hash = Math.abs(hash);
   return colors[hash % colors.length];
+}
+
+function getInitials(name) {
+  const nameParts = name.split(" ");
+  const firstInitial = nameParts[0] ? nameParts[0][0].toUpperCase() : "";
+  const lastInitial =
+    nameParts.length > 1
+      ? nameParts[nameParts.length - 1][0].toUpperCase()
+      : "";
+  return firstInitial + lastInitial;
 }
 
 export default Card;

@@ -1,25 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import "./DisplayOptions.css";
+import { useDisplayOptions } from "../../context/DisplayOptionsContext";
 
-function DisplayOptions({ onDisplayChange }) {
-  const [grouping, setGrouping] = useState("status");
-  const [sorting, setSorting] = useState("priority");
+function DisplayOptions() {
+  const { displayOptions, updateDisplayOptions } = useDisplayOptions();
 
   const handleGroupingChange = (e) => {
-    setGrouping(e.target.value);
-    onDisplayChange(e.target.value, sorting);
+    updateDisplayOptions({ grouping: e.target.value });
   };
 
   const handleSortingChange = (e) => {
-    setSorting(e.target.value);
-    onDisplayChange(grouping, e.target.value);
+    updateDisplayOptions({ sorting: e.target.value });
   };
 
   return (
     <div className="display-options">
       <div className="option">
         <label>Grouping</label>
-        <select value={grouping} onChange={handleGroupingChange}>
+        <select value={displayOptions.grouping} onChange={handleGroupingChange}>
           <option value="status">Status</option>
           <option value="user">User</option>
           <option value="priority">Priority</option>
@@ -27,7 +25,7 @@ function DisplayOptions({ onDisplayChange }) {
       </div>
       <div className="option">
         <label>Ordering</label>
-        <select value={sorting} onChange={handleSortingChange}>
+        <select value={displayOptions.sorting} onChange={handleSortingChange}>
           <option value="priority">Priority</option>
           <option value="title">Title</option>
         </select>

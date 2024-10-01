@@ -28,6 +28,13 @@
   border: none;
 }
 
+.status-icon-column {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border: none;
+}
+
 .ticket-count {
   /* margin-left: 10px; */
   /* background-color: #e0e0e0; */

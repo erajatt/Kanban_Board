@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import DisplayOptions from "../display_options/DisplayOptions";
 import { ReactComponent as DisplayIcon } from "../../assets/icons_FEtask/Display.svg";
 import { ReactComponent as DownIcon } from "../../assets/icons_FEtask/down.svg";
-
 import "./Header.css";
 
-function Header({ onDisplayChange }) {
+function Header() {
   const [showOptions, setShowOptions] = useState(false);
 
   const handleDisplayClick = () => {
@@ -24,9 +23,8 @@ function Header({ onDisplayChange }) {
         </span>
       </button>
 
-      {/* Add transition for smooth opening */}
       <div className={`options-container ${showOptions ? "open" : ""}`}>
-        {showOptions && <DisplayOptions onDisplayChange={onDisplayChange} />}
+        {showOptions && <DisplayOptions />}
       </div>
     </header>
   );

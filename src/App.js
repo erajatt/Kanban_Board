@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "./components/header/Header";
 import KanbanBoard from "./components/kanban_board/KanbanBoard";
+import { DisplayOptionsProvider } from "./context/DisplayOptionsContext";
 import { fetchData } from "./utils/api";
 import "./App.css";
 
@@ -26,13 +27,15 @@ function App() {
 
   return (
     <div className="app">
-      <Header onDisplayChange={handleDisplayChange} />
-      <KanbanBoard
-        tickets={tickets}
-        users={users}
-        grouping={grouping}
-        sorting={sorting}
-      />
+      <DisplayOptionsProvider>
+        <Header onDisplayChange={handleDisplayChange} />
+        <KanbanBoard
+          tickets={tickets}
+          users={users}
+          grouping={grouping}
+          sorting={sorting}
+        />
+      </DisplayOptionsProvider>
     </div>
   );
 }

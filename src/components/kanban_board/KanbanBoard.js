@@ -1,8 +1,11 @@
 import React from "react";
 import Column from "../column/Column";
 import "./KanbanBoard.css";
+import { useDisplayOptions } from "../../context/DisplayOptionsContext";
 
-function KanbanBoard({ tickets, users, grouping, sorting }) {
+function KanbanBoard({ tickets, users }) {
+  const { displayOptions } = useDisplayOptions();
+  const { grouping, sorting } = displayOptions;
   const groupTickets = () => {
     const grouped = {};
     tickets.forEach((ticket) => {
