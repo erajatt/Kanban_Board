@@ -1,23 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Header from "./components/header/Header";
+import KanbanBoard from "./components/kanban_board/KanbanBoard";
+import { fetchData } from "./utils/api";
+import "./App.css";
 
 function App() {
+  const [tickets, setTickets] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [grouping, setGrouping] = useState("status");
+  const [sorting, setSorting] = useState("priority");
+
+  useEffect(() => {
+    const fetchDataFromAPI = async () => {
+      const data = await fetchData();
+      setTickets(data.tickets);
+      setUsers(data.users);
+    };
+    fetchDataFromAPI();
+  }, []);
+
+  const handleDisplayChange = (newGrouping, newSorting) => {
+    setGrouping(newGrouping);
+    setSorting(newSorting);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Header onDisplayChange={handleDisplayChange} />
+      <KanbanBoard
+        tickets={tickets}
+        users={users}
+        grouping={grouping}
+        sorting={sorting}
+      />
     </div>
   );
 }

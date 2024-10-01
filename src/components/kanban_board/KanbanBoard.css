@@ -1,0 +1,12 @@
+.kanban-board {
+  display: flex;
+  padding: 20px;
+  overflow-x: scroll; /* Enable horizontal scroll */
+  overflow-y: hidden; /* Hide vertical scroll */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
+.kanban-board::-webkit-scrollbar {
+  display: none; /* Hide the scrollbar for WebKit-based browsers (Chrome, Safari, etc.) */
+}
