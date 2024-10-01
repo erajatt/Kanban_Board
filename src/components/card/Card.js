@@ -1,6 +1,9 @@
 import React from "react";
+
+// Styles Import
 import "./Card.css";
 
+// Icons import
 import { ReactComponent as UrgentIcon } from "../../assets/icons_FEtask/SVG - Urgent Priority colour.svg";
 import { ReactComponent as HighIcon } from "../../assets/icons_FEtask/Img - High Priority.svg";
 import { ReactComponent as MediumIcon } from "../../assets/icons_FEtask/Img - Medium Priority.svg";
@@ -37,6 +40,7 @@ function Card({ ticket, user, grouping }) {
       <div className="card-header">
         <span className="ticket-id">{ticket.id}</span>
         {grouping !== "user" && (
+          // if group is not user only then show user profile pic
           <div
             className="user-avatar"
             style={{ backgroundColor: getUserColor(user.name) }}
@@ -52,10 +56,12 @@ function Card({ ticket, user, grouping }) {
       </div>
       <div className="card-title">
         {grouping !== "status" && <StatusIcon className="status-icon" />}
+        {/* if group is not status only then show ticket status */}
         <h3>{ticket.title}</h3>
       </div>
       <div className="card-footer">
         {grouping !== "priority" && <PriorityIcon className="priority-icon" />}
+        {/* if group is not priority only then show ticket priority */}
         <div className="card-tags">
           {ticket.tag.map((tag) => (
             <span key={tag} className="tag">
@@ -69,6 +75,7 @@ function Card({ ticket, user, grouping }) {
 }
 
 function getUserColor(name) {
+  // returns a different color for each avatar
   const colors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A", "#98D8C8"];
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
@@ -79,6 +86,7 @@ function getUserColor(name) {
 }
 
 function getInitials(name) {
+  // extracts and combines the first letter of first name and first letter of last name.
   const nameParts = name.split(" ");
   const firstInitial = nameParts[0] ? nameParts[0][0].toUpperCase() : "";
   const lastInitial =

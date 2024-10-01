@@ -6,8 +6,24 @@ import { useDisplayOptions } from "../../context/DisplayOptionsContext";
 function KanbanBoard({ tickets, users }) {
   const { displayOptions } = useDisplayOptions();
   const { grouping, sorting } = displayOptions;
+
+  const statusOrder = ["Backlog", "Todo", "In progress", "Done", "Cancelled"];
+  const priorityOrder = ["No priority", "Urgent", "High", "Medium", "Low"];
+
+  // Group tickets based on the current grouping (status, priority, or user)
   const groupTickets = () => {
     const grouped = {};
+
+    // Initialize groups based on grouping type
+    if (grouping === "status") {
+      statusOrder.forEach((status) => (grouped[status] = []));
+    } else if (grouping === "priority") {
+      priorityOrder.forEach((priority) => (grouped[priority] = []));
+    } else if (grouping === "user") {
+      users.forEach((user) => (grouped[user.id] = []));
+    }
+
+    // Populate groups with tickets
     tickets.forEach((ticket) => {
       let key;
       switch (grouping) {
@@ -18,25 +34,26 @@ function KanbanBoard({ tickets, users }) {
           key = ticket.userId;
           break;
         case "priority":
-          key = ticket.priority;
+          key = getPriorityName(ticket.priority);
           break;
         default:
           key = ticket.status;
       }
-      if (!grouped[key]) {
-        grouped[key] = [];
+      if (grouped[key]) {
+        grouped[key].push(ticket);
       }
-      grouped[key].push(ticket);
     });
+
     return grouped;
   };
 
+  // Sort tickets based on the selected sorting option (priority or title)
   const sortTickets = (ticketsToSort) => {
     return ticketsToSort.sort((a, b) => {
       if (sorting === "priority") {
-        return b.priority - a.priority;
+        return b.priority - a.priority; // Sort by priority (higher first)
       } else {
-        return a.title.localeCompare(b.title);
+        return a.title.localeCompare(b.title); // Sort alphabetically by title
       }
     });
   };
@@ -46,26 +63,29 @@ function KanbanBoard({ tickets, users }) {
     groupedAndSortedTickets[key] = sortTickets(groupedAndSortedTickets[key]);
   });
 
-  // Custom order for priority grouping
-  const priorityOrder = [0, 4, 3, 2, 1]; // No priority, Urgent, High, Medium, Low
+  // Return keys in the correct order based on the current grouping
+  const getSortedKeys = () => {
+    switch (grouping) {
+      case "status":
+        return statusOrder;
+      case "priority":
+        return priorityOrder;
+      case "user":
+        return users.map((user) => user.id);
+      default:
+        return Object.keys(groupedAndSortedTickets);
+    }
+  };
 
-  const sortedKeys =
-    grouping === "priority"
-      ? Object.keys(groupedAndSortedTickets).sort((a, b) => {
-          return (
-            priorityOrder.indexOf(parseInt(a)) -
-            priorityOrder.indexOf(parseInt(b))
-          );
-        })
-      : Object.keys(groupedAndSortedTickets);
+  const sortedKeys = getSortedKeys();
 
   return (
     <div className="kanban-board">
       {sortedKeys.map((key) => (
         <Column
           key={key}
-          title={grouping === "user" ? key : getPriorityName(key)}
-          tickets={groupedAndSortedTickets[key]}
+          title={key}
+          tickets={groupedAndSortedTickets[key] || []}
           users={users}
           grouping={grouping}
         />

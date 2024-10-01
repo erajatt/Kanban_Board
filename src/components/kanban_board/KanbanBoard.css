@@ -1,12 +1,24 @@
 .kanban-board {
   display: flex;
-  padding: 40px;
-  overflow-x: scroll; /* Enable horizontal scroll */
-  overflow-y: hidden; /* Hide vertical scroll */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
+  padding: 30px;
+  overflow-x: auto;
+  /* overflow-y: hidden; */
+  height: calc(100vh - 80px); /* Subtract total vertical padding */
+  box-sizing: border-box; /* Include padding in the element's total width and height */
 }
 
+/* Webkit-based browsers (Chrome, Safari, etc.) */
 .kanban-board::-webkit-scrollbar {
-  display: none; /* Hide the scrollbar for WebKit-based browsers (Chrome, Safari, etc.) */
+  height: 8px; /* Width of the scrollbar */
+}
+
+/* Firefox */
+.kanban-board {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+.kanban-column {
+  height: 100%;
+  overflow-y: auto;
 }

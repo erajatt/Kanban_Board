@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Header from "./components/header/Header";
 import KanbanBoard from "./components/kanban_board/KanbanBoard";
 import { DisplayOptionsProvider } from "./context/DisplayOptionsContext";
-import { fetchData } from "./utils/api";
 import "./App.css";
 
 function App() {
@@ -10,6 +9,14 @@ function App() {
   const [users, setUsers] = useState([]);
   const [grouping, setGrouping] = useState("status");
   const [sorting, setSorting] = useState("priority");
+
+  const fetchData = async () => {
+    const response = await fetch(
+      "https://api.quicksell.co/v1/internal/frontend-assignment"
+    );
+    const data = await response.json();
+    return data;
+  };
 
   useEffect(() => {
     const fetchDataFromAPI = async () => {

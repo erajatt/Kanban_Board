@@ -14,7 +14,7 @@ import { ReactComponent as DoneIcon } from "../../assets/icons_FEtask/Done.svg";
 import { ReactComponent as CancelledIcon } from "../../assets/icons_FEtask/Cancelled.svg";
 import { ReactComponent as BacklogIcon } from "../../assets/icons_FEtask/Backlog.svg";
 
-// Priority Icons Mapping
+// Icons for priority and status
 const priorityIcons = {
   Urgent: UrgentIcon,
   High: HighIcon,
@@ -24,26 +24,53 @@ const priorityIcons = {
 };
 
 const statusIcons = {
+  Backlog: BacklogIcon,
   Todo: TodoIcon,
   "In progress": InProgressIcon,
   Done: DoneIcon,
   Cancelled: CancelledIcon,
-  Backlog: BacklogIcon,
 };
 
 function Column({ title, tickets, users, grouping }) {
-  const user = grouping === "user" ? users.find((u) => u.id === title) : null;
-
-  const getPriorityIcon = (priority) => {
-    const PriorityIcon = priorityIcons[priority];
-    return <PriorityIcon className="priority-icon-column" />;
+  // Get appropriate icon based on the grouping (priority, status, user)
+  const getColumnIcon = () => {
+    if (grouping === "priority" && priorityIcons[title]) {
+      const PriorityIcon = priorityIcons[title];
+      return <PriorityIcon className="priority-icon-column" />;
+    } else if (grouping === "status" && statusIcons[title]) {
+      const StatusIcon = statusIcons[title];
+      return <StatusIcon className="status-icon-column" />;
+    } else if (grouping === "user") {
+      const user = users.find((u) => u.id === title);
+      if (user) {
+        return (
+          <div
+            className="user-avatar"
+            style={{ backgroundColor: getUserColor(user.name) }}
+          >
+            {getInitials(user.name)}
+            <span
+              className={`availability-indicator ${
+                user.available ? "available" : ""
+              }`}
+            ></span>
+          </div>
+        );
+      }
+    }
+    return null;
   };
 
-  const getStatusIcon = (status) => {
-    const StatusIcon = statusIcons[status];
-    return <StatusIcon className="status-icon-column" />;
+  // Get title based on the grouping (name for user, otherwise use the title)
+  const getColumnTitle = () => {
+    if (grouping === "user") {
+      const user = users.find((u) => u.id === title);
+      return user ? user.name : title;
+    }
+    return title;
   };
 
+  // Generate user initials from their name
   function getInitials(name) {
     const nameParts = name.split(" ");
     const firstInitial = nameParts[0] ? nameParts[0][0].toUpperCase() : "";
@@ -54,36 +81,22 @@ function Column({ title, tickets, users, grouping }) {
     return firstInitial + lastInitial;
   }
 
+  // Generate a color for each user based on their name
+  function getUserColor(name) {
+    const colors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A", "#98D8C8"];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    hash = Math.abs(hash);
+    return colors[hash % colors.length];
+  }
+
   return (
     <div className="column">
       <div className="column-header">
-        {grouping === "priority" && priorityIcons[title] ? (
-          <>
-            {getPriorityIcon(title)} {/* Render the icon */}
-            <h2 className="column-title">{title}</h2>
-          </>
-        ) : grouping === "user" && user ? (
-          <>
-            <div
-              className="user-avatar"
-              style={{ backgroundColor: getUserColor(user.name) }}
-            >
-              {getInitials(user.name)}
-              <span
-                className={`availability-indicator ${
-                  user.available ? "available" : ""
-                }`}
-              ></span>
-            </div>
-
-            <h2 className="column-title">{user.name}</h2>
-          </>
-        ) : (
-          <>
-            {getStatusIcon(title)}
-            <h2 className="column-title">{title}</h2>
-          </>
-        )}
+        {getColumnIcon()}
+        <h2 className="column-title">{getColumnTitle()}</h2>
         <span className="ticket-count">{tickets.length}</span>
         <div className="column-actions">
           <AddIcon className="action-icon" />
@@ -91,6 +104,7 @@ function Column({ title, tickets, users, grouping }) {
         </div>
       </div>
       <div className="card-container">
+        {/* Render each ticket as a Card */}
         {tickets.map((ticket) => (
           <Card
             key={ticket.id}
@@ -102,16 +116,6 @@ function Column({ title, tickets, users, grouping }) {
       </div>
     </div>
   );
-}
-
-function getUserColor(name) {
-  const colors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A", "#98D8C8"];
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  hash = Math.abs(hash);
-  return colors[hash % colors.length];
 }
 
 export default Column;
