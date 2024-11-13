@@ -13,6 +13,7 @@ import { ReactComponent as InProgressIcon } from "../../assets/icons_FEtask/in-p
 import { ReactComponent as DoneIcon } from "../../assets/icons_FEtask/Done.svg";
 import { ReactComponent as CancelledIcon } from "../../assets/icons_FEtask/Cancelled.svg";
 import { ReactComponent as BacklogIcon } from "../../assets/icons_FEtask/Backlog.svg";
+import { useDisplayOptions } from "../../context/DisplayOptionsContext";
 
 // Icons for priority and status
 const priorityIcons = {
@@ -31,7 +32,10 @@ const statusIcons = {
   Cancelled: CancelledIcon,
 };
 
-function Column({ title, tickets, users, grouping }) {
+function Column({ title, tickets, users }) {
+  const { displayOptions } = useDisplayOptions();
+  const grouping = displayOptions.grouping;
+
   // Get appropriate icon based on the grouping (priority, status, user)
   const getColumnIcon = () => {
     if (grouping === "priority" && priorityIcons[title]) {
@@ -110,7 +114,6 @@ function Column({ title, tickets, users, grouping }) {
             key={ticket.id}
             ticket={ticket}
             user={users.find((u) => u.id === ticket.userId)}
-            grouping={grouping}
           />
         ))}
       </div>

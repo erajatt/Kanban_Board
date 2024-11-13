@@ -1,7 +1,10 @@
 import React from "react";
 
-// Styles Import
+// Styles import
 import "./Card.css";
+
+// Context import
+import { useDisplayOptions } from "../../context/DisplayOptionsContext";
 
 // Icons import
 import { ReactComponent as UrgentIcon } from "../../assets/icons_FEtask/SVG - Urgent Priority colour.svg";
@@ -31,7 +34,10 @@ const statusIcons = {
   Backlog: BacklogIcon,
 };
 
-function Card({ ticket, user, grouping }) {
+function Card({ ticket, user }) {
+  const { displayOptions } = useDisplayOptions();
+  const grouping = displayOptions.grouping;
+
   const PriorityIcon = priorityIcons[ticket.priority];
   const StatusIcon = statusIcons[ticket.status];
 

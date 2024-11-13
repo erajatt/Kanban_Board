@@ -1,22 +1,21 @@
 import React from "react";
+
+//Styles import
 import "./DisplayOptions.css";
 
-// useContext (Display Options is the global state)
+//Context import
 import { useDisplayOptions } from "../../context/DisplayOptionsContext";
 
 function DisplayOptions() {
   const { displayOptions, updateDisplayOptions } = useDisplayOptions();
 
-  // Arrays for grouping and sorting options
   const groupingOptions = ["status", "user", "priority"];
   const sortingOptions = ["priority", "title"];
 
-  // Handled changes for grouping
   const handleGroupingChange = (e) => {
     updateDisplayOptions({ grouping: e.target.value });
   };
 
-  // Handled changes for sorting
   const handleSortingChange = (e) => {
     updateDisplayOptions({ sorting: e.target.value });
   };
