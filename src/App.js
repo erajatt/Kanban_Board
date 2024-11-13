@@ -7,8 +7,6 @@ import "./App.css";
 function App() {
   const [tickets, setTickets] = useState([]);
   const [users, setUsers] = useState([]);
-  const [grouping, setGrouping] = useState("status");
-  const [sorting, setSorting] = useState("priority");
 
   const fetchData = async () => {
     const response = await fetch(
@@ -27,21 +25,11 @@ function App() {
     fetchDataFromAPI();
   }, []);
 
-  const handleDisplayChange = (newGrouping, newSorting) => {
-    setGrouping(newGrouping);
-    setSorting(newSorting);
-  };
-
   return (
     <div className="app">
       <DisplayOptionsProvider>
-        <Header onDisplayChange={handleDisplayChange} />
-        <KanbanBoard
-          tickets={tickets}
-          users={users}
-          grouping={grouping}
-          sorting={sorting}
-        />
+        <Header />
+        <KanbanBoard tickets={tickets} users={users} />
       </DisplayOptionsProvider>
     </div>
   );
